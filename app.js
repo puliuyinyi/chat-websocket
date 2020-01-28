@@ -1,6 +1,7 @@
 //引入程序包
 var express = require('express')
   , path = require('path')
+  , ESAPI = require('node-esapi')
   , app = express()
   , server = require('http').createServer(app)
   , io = require('socket.io').listen(server);
@@ -80,6 +81,7 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
+  app.use(ESAPI.middleware());
 });
 
 app.configure('development', function(){

@@ -3,6 +3,8 @@
     var status = $('#status');
     var input = $('#input');
     var myName = false;
+	
+	org.owasp.esapi.ESAPI.initialize();
 
     //建立websocket连接
     socket = io.connect('http://localhost:3000');
@@ -16,16 +18,16 @@
         var p = '';
         if (json.type === 'welcome'){
             if(myName==json.text) status.text(myName + ': ').css('color', json.color);
-            p = '<p style="background:'+json.color+'">system  @ '+ json.time+ ' : Welcome ' + json.text +'</p>';
+            p = '<p style="background:'+json.color+'">system  @ '+ json.time+ ' : Welcome ' + $ESAPI.encoder().encodeForHTML(json.text) +'</p>';
         }else if(json.type == 'disconnect'){
-            p = '<p style="background:'+json.color+'">system  @ '+ json.time+ ' : Bye ' + json.text +'</p>';
+            p = '<p style="background:'+json.color+'">system  @ '+ json.time+ ' : Bye ' + $ESAPI.encoder().encodeForHTML(json.text) +'</p>';
         }
         content.prepend(p); 
     });
 
     //监听message事件，打印消息信息
     socket.on('message',function(json){
-        var p = '<p><span style="color:'+json.color+';">' + json.author+'</span> @ '+ json.time+ ' : '+json.text+'</p>';
+        var p = '<p><span style="color:'+json.color+';">' + $ESAPI.encoder().encodeForHTML(json.author)+'</span> @ '+ json.time+ ' : '+$ESAPI.encoder().encodeForHTML(json.text)+'</p>';
         content.prepend(p);
     });
 
